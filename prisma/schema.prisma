@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String           @id @default(cuid())
+  username      String           @unique
+  name          String?
+  email         String           @unique
+  image         String?
+  bio           String?
+  createdAt     DateTime         @default(now())
+
+  watchedMovies WatchedMovie[]
+  watchlist     Watchlist[]
+  sentRecs      Recommendation[] @relation("SentRecommendations")
+  receivedRecs  Recommendation[] @relation("ReceivedRecommendations")
+
+  friendshipsA  Friendship[]     @relation("UserA")
+  friendshipsB  Friendship[]     @relation("UserB")
+}
+
+model Movie {
+  id          String           @id
+  title       String
+  posterPath  String?
+  releaseYear Int?
+  genre       String?
+  overview    String?
+
+  watchedBy   WatchedMovie[]
+  watchlisted Watchlist[]
+  recommendations Recommendation[]
+}
+
+model WatchedMovie {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  rating    Float?
+  watchedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  createdAt DateTime @default(now())
+
+  userA User @relation("UserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB User @relation("UserB", fields: [userBId], references: [id], onDelete: Cascade)
+
+  @@unique([userAId, userBId])
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  senderId    String
+  receiverId  String
+  movieId      String
+  note         String?
+  isPrivate    Boolean @default(true)
+  createdAt    DateTime @default(now())
+
+  sender   User  @relation("SentRecommendations", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User  @relation("ReceivedRecommendations", fields: [receiverId], references: [id], onDelete: Cascade)
+  movie    Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+}
