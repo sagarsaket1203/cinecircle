@@ -1,3 +1,7 @@
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import LogoutButton from "@/components/LogoutButton";
+
 import {
   Home,
   Film,
@@ -8,7 +12,13 @@ import {
   Bell,
 } from "lucide-react";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   return (
     <div className="min-h-screen bg-[#0B0D10] text-white">
       <div className="flex">
@@ -27,16 +37,29 @@ export default function HomePage() {
             <SidebarItem icon={<Settings size={20} />} label="Settings" />
           </nav>
 
-          <div className="mt-auto">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-              <div className="h-10 w-10 rounded-full bg-red-500"></div>
+        <div className="mt-auto">
+  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+    {session.user.image ? (
+      <img
+  src={session.user.image || "https://ui-avatars.com/api/?name=S"}
+  alt="profile"
+  className="h-10 w-10 rounded-full object-cover"
+/>
+    ) : (
+      <div className="h-10 w-10 rounded-full bg-red-500"></div>
+    )}
 
-              <div>
-                <p className="font-medium">Sagar Kumar</p>
-                <p className="text-sm text-gray-400">@sagar</p>
-              </div>
-            </div>
-          </div>
+    <div>
+      <p className="font-medium">
+        {session.user.name}
+      </p>
+
+      <p className="text-sm text-gray-400">
+        {session.user.email}
+      </p>
+    </div>
+  </div>
+</div>
         </aside>
 
         {/* Main */}
@@ -58,7 +81,7 @@ export default function HomePage() {
           {/* Hero */}
           <section className="px-6 py-8">
             <h2 className="text-4xl font-bold">
-              Hello, Sagar 👋
+              Hello, {session.user.name} 
             </h2>
 
             <p className="text-gray-400 mt-2">
