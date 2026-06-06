@@ -1,9 +1,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import MarkWatchedButton from "@/components/MarkWatchedButton";
 
-export default async function WatchlistPage() {
+export default async function WatchedPage() {
   const session = await auth();
 
   if (!session?.user?.email) {
@@ -15,7 +14,7 @@ export default async function WatchlistPage() {
       email: session.user.email,
     },
     include: {
-      watchlist: {
+      watchedMovies: {
         include: {
           movie: true,
         },
@@ -26,11 +25,11 @@ export default async function WatchlistPage() {
   return (
     <div className="min-h-screen bg-[#0B0D10] text-white p-8">
       <h1 className="text-4xl font-bold mb-8">
-        My Watchlist
+        Watched Movies
       </h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
-        {user?.watchlist.map((item) => (
+        {user?.watchedMovies.map((item) => (
           <div
             key={item.id}
             className="bg-[#161A20] rounded-2xl overflow-hidden"
@@ -42,13 +41,12 @@ export default async function WatchlistPage() {
             />
 
             <div className="p-4">
-  <h3>{item.movie.title}</h3>
+              <h3>{item.movie.title}</h3>
 
-  <p className="text-gray-400 text-sm">
-    {item.movie.releaseYear}
-  </p>
-<MarkWatchedButton movieId={item.movie.id} />
-</div>
+              <p className="text-gray-400 text-sm">
+                {item.movie.releaseYear}
+              </p>
+            </div>
           </div>
         ))}
       </div>
