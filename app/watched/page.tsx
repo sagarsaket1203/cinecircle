@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import RatingStars from "@/components/RatingStars";
 
 export default async function WatchedPage() {
   const session = await auth();
@@ -40,13 +41,15 @@ export default async function WatchedPage() {
               className="w-full h-[320px] object-cover"
             />
 
-            <div className="p-4">
-              <h3>{item.movie.title}</h3>
+           <div className="p-4">
+  <h3>{item.movie.title}</h3>
 
-              <p className="text-gray-400 text-sm">
-                {item.movie.releaseYear}
-              </p>
-            </div>
+  <p className="text-gray-400 text-sm">
+    {item.movie.releaseYear}
+  </p>
+
+  <RatingStars movieId={item.movie.id} />
+</div>
           </div>
         ))}
       </div>
