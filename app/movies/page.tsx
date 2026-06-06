@@ -35,7 +35,7 @@ export default function MoviesPage() {
       />
 
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
-        {movies.map((movie) => (
+        {movies.map((movie: any) => (
           <div
             key={movie.imdbID}
             className="bg-[#161A20] border border-white/10 rounded-2xl overflow-hidden"
@@ -58,6 +58,32 @@ export default function MoviesPage() {
               <p className="text-gray-400 text-sm mt-1">
                 {movie.Year}
               </p>
+
+              <button
+                onClick={async () => {
+                  const res = await fetch("/api/watchlist", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      imdbID: movie.imdbID,
+                      title: movie.Title,
+                      poster: movie.Poster,
+                      year: movie.Year,
+                    }),
+                  });
+
+                  if (res.ok) {
+                    alert("Added to watchlist!");
+                  } else {
+                    alert("Failed to add movie");
+                  }
+                }}
+                className="mt-3 w-full bg-red-600 hover:bg-red-700 rounded-xl py-2"
+              >
+                + Watchlist
+              </button>
             </div>
           </div>
         ))}
