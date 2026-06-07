@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AddFriendButton from "@/components/AddFriendButton";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
@@ -32,31 +33,38 @@ export default function SearchPage() {
 
       <div className="mt-8 space-y-4">
         {users.map((user) => (
-          <a
+          <div
             key={user.id}
-            href={`/u/${user.username}`}
-            className="block bg-[#161A20] border border-white/10 rounded-2xl p-4 hover:border-red-500"
+            className="bg-[#161A20] border border-white/10 rounded-2xl p-4 hover:border-red-500 transition"
           >
-            <div className="flex items-center gap-4">
-              <img
-                src={
-                  user.image ||
-                  "https://ui-avatars.com/api/?name=User"
-                }
-                className="w-12 h-12 rounded-full"
-              />
+            <div className="flex items-center justify-between">
+              <a
+                href={`/u/${user.username}`}
+                className="flex items-center gap-4"
+              >
+                <img
+                  src={
+                    user.image ||
+                    "https://ui-avatars.com/api/?name=User"
+                  }
+                  alt={user.name}
+                  className="w-12 h-12 rounded-full"
+                />
 
-              <div>
-                <p className="font-semibold">
-                  {user.name}
-                </p>
+                <div>
+                  <p className="font-semibold">
+                    {user.name}
+                  </p>
 
-                <p className="text-gray-400">
-                  @{user.username}
-                </p>
-              </div>
+                  <p className="text-gray-400">
+                    @{user.username}
+                  </p>
+                </div>
+              </a>
+
+              <AddFriendButton friendId={user.id} />
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </div>

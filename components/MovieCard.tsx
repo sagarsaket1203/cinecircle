@@ -14,7 +14,10 @@ export default function MovieCard({
   year,
 }: MovieCardProps) {
   return (
-    <div className="group cursor-pointer">
+    <a
+  href="/movies"
+  className="group cursor-pointer block"
+>
       <div
         className="
           relative
@@ -74,6 +77,6 @@ export default function MovieCard({
           {genre} • {year}
         </p>
       </div>
-    </div>
+    </a>
   );
 }

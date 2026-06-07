@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import RatingStars from "@/components/RatingStars";
+import RecommendButton from "@/components/RecommendButton";
 
 export default async function WatchedPage() {
   const session = await auth();
@@ -49,6 +50,9 @@ export default async function WatchedPage() {
   </p>
 
   <RatingStars movieId={item.movie.id} />
+  <RecommendButton
+  movieId={item.movie.id}
+  />
 </div>
           </div>
         ))}

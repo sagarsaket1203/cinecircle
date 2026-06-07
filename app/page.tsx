@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
 
+
 import {
   Home,
   Film,
@@ -14,6 +15,7 @@ import {
 
 export default async function HomePage() {
   const session = await auth();
+  
 
   if (!session?.user) {
     redirect("/login");
@@ -21,49 +23,8 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0B0D10] text-white">
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="hidden md:flex w-64 h-screen border-r border-white/10 flex-col p-6 fixed">
-          <h1 className="text-2xl font-bold">
-            Cine<span className="text-red-500">Circle</span>
-          </h1>
-
-          <nav className="mt-10 space-y-2">
-            <SidebarItem icon={<Home size={20} />} label="Home" active />
-            <SidebarItem icon={<Film size={20} />} label="Movies" />
-            <SidebarItem icon={<Users size={20} />} label="Friends" />
-            <SidebarItem icon={<Search size={20} />} label="Search" />
-            <SidebarItem icon={<BarChart3 size={20} />} label="Stats" />
-            <SidebarItem icon={<Settings size={20} />} label="Settings" />
-          </nav>
-
-        <div className="mt-auto">
-  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-    {session.user.image ? (
-      <img
-  src={session.user.image || "https://ui-avatars.com/api/?name=S"}
-  alt="profile"
-  className="h-10 w-10 rounded-full object-cover"
-/>
-    ) : (
-      <div className="h-10 w-10 rounded-full bg-red-500"></div>
-    )}
-
-    <div>
-      <p className="font-medium">
-        {session.user.name}
-      </p>
-
-      <p className="text-sm text-gray-400">
-        {session.user.email}
-      </p>
-    </div>
-  </div>
-</div>
-        </aside>
-
         {/* Main */}
-        <main className="flex-1 md:ml-64">
+        <main>
           {/* Top Bar */}
           <div className="sticky top-0 z-50 backdrop-blur-md bg-[#0B0D10]/80 border-b border-white/10">
             <div className="flex items-center justify-between px-6 py-4">
@@ -202,8 +163,7 @@ export default async function HomePage() {
             </div>
           </section>
         </main>
-      </div>
-    </div>
+</div>
   );
 }
 
