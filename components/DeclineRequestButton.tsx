@@ -1,15 +1,15 @@
 "use client";
 
-export default function AddFriendButton({
-  friendId,
+export default function DeclineRequestButton({
+  requestId,
 }: {
-  friendId: string;
+  requestId: string;
 }) {
   return (
     <button
       onClick={async () => {
         const res = await fetch(
-          "/api/friend-request",
+          "/api/friend-request/decline",
           {
             method: "POST",
             headers: {
@@ -17,22 +17,18 @@ export default function AddFriendButton({
                 "application/json",
             },
             body: JSON.stringify({
-              receiverId: friendId,
+              requestId,
             }),
           }
         );
 
-      const data = await res.json();
-
-if (res.ok) {
-  alert("Friend request sent!");
-} else {
-  alert(JSON.stringify(data));
-}
+        if (res.ok) {
+          location.reload();
+        }
       }}
-      className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl"
+      className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-xl"
     >
-      Add Friend
+      Decline
     </button>
   );
 }
